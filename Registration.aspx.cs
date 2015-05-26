@@ -66,7 +66,7 @@ public partial class Registration : System.Web.UI.Page
             com.Parameters.AddWithValue("@country", DropDownListcountry.SelectedValue.ToString());
 
             com.ExecuteNonQuery();
-            Response.Redirect("table.aspx");
+            Response.Redirect("login.aspx");
             conn.Close();
         }
         catch(Exception ex)
