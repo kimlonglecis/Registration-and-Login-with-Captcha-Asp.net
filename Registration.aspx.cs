@@ -14,59 +14,65 @@ public partial class Registration : System.Web.UI.Page
 {
     protected void Page_Load(object sender, EventArgs e)
     {
-            //Check if username is taken.  Not working
-            //SqlConnection conn = new SqlConnection(ConfigurationManager.ConnectionStrings["RegistrationConnectionString"].ConnectionString);
-            //conn.Open();
-            //String checkUser = "Select count(*) from Userdata where Username='" + TextBo + "'";
-            //SqlCommand com = new SqlCommand(checkUser, conn);
-            //int temp = Convert.ToInt32(com.ExecuteScalar().ToString());
-            //if (temp == 1)
-            //{
-            //    Response.Write("User already exists, please try a different username");
-            //}
-            //conn.Close();
-        
+        //Check if username is taken.  Not working
+        //SqlConnection conn = new SqlConnection(ConfigurationManager.ConnectionStrings["RegistrationConnectionString"].ConnectionString);
+        //conn.Open();
+        //String checkUser = "Select count(*) from Userdata where Username='" + TextBo + "'";
+        //SqlCommand com = new SqlCommand(checkUser, conn);
+        //int temp = Convert.ToInt32(com.ExecuteScalar().ToString());
+        //if (temp == 1)
+        //{
+        //    Response.Write("User already exists, please try a different username");
+        //}
+        //conn.Close();
+
     }
     protected void Button1_Click(object sender, EventArgs e)
     {
+        string hashBox = Encrypt(TextBoxpassword.Text);
+        try
+        {
 
-        Guid newGUID = Guid.NewGuid();
-        SqlConnection conn = new SqlConnection(ConfigurationManager.ConnectionStrings["RegistrationConnectionString"].ConnectionString);
-        conn.Open();
-        string insertQuery = "insert into Userdata (Id, Username, Email, Password, Country) values (@id, @username, @email, @password, @country)";
-        
-        //Check if username is taken.  Not working
-        //SqlCommand cmd = new SqlCommand();
-        //cmd.CommandText = "select * from Userdata where Username=@uname";
-        //cmd.Parameters.AddWithValue("@uname", TextBoxuserName.Text);
-        //cmd.Connection = conn;
-        //SqlDataReader rd = cmd.ExecuteReader();
-        //if(rd.HasRows)
-        //{
-        //    Label1.Visible = true;
-        //    Label1.Text = "username already avaiable";
-        //    Label1.ForeColor = System.Drawing.Color.Red;
-        //}
-        //else
-        //{
-        //    Label1.Visible = true;
-        //    Label1.Text = "username not already avaiable";
-        //    Label1.ForeColor = System.Drawing.Color.Green; 
-        //}
-        
-        SqlCommand com = new SqlCommand(insertQuery, conn);
-        com.Parameters.AddWithValue("@id", newGUID.ToString());
-        com.Parameters.AddWithValue("@username", Encrypt(TextBoxuserName.Text));
-        com.Parameters.AddWithValue("@email", TextBoxeMail.Text);
-        com.Parameters.AddWithValue("@password", Encrypt(TextBoxpassword.Text));
-        com.Parameters.AddWithValue("@country", DropDownListcountry.SelectedValue.ToString());
 
-        com.ExecuteNonQuery();
-        Response.Redirect("table.aspx");
+            Guid newGUID = Guid.NewGuid();
+            SqlConnection conn = new SqlConnection(ConfigurationManager.ConnectionStrings["RegistrationConnectionString"].ConnectionString);
+            conn.Open();
+            string insertQuery = "insert into Userdata (Id, Username, Email, Password, Country) values (@id, @username, @email, @password, @country)";
 
-        conn.Close();
-         
-    
+            //Check if username is taken.  Not working
+            //SqlCommand cmd = new SqlCommand();
+            //cmd.CommandText = "select * from Userdata where Username=@uname";
+            //cmd.Parameters.AddWithValue("@uname", TextBoxuserName.Text);
+            //cmd.Connection = conn;
+            //SqlDataReader rd = cmd.ExecuteReader();
+            //if(rd.HasRows)
+            //{
+            //    Label1.Visible = true;
+            //    Label1.Text = "username already avaiable";
+            //    Label1.ForeColor = System.Drawing.Color.Red;
+            //}
+            //else
+            //{
+            //    Label1.Visible = true;
+            //    Label1.Text = "username not already avaiable";
+            //    Label1.ForeColor = System.Drawing.Color.Green; 
+            //}
+
+            SqlCommand com = new SqlCommand(insertQuery, conn);
+            com.Parameters.AddWithValue("@id", newGUID.ToString());
+            com.Parameters.AddWithValue("@username", TextBoxuserName.Text);
+            com.Parameters.AddWithValue("@email", TextBoxeMail.Text);
+            com.Parameters.AddWithValue("@password", hashBox);
+            com.Parameters.AddWithValue("@country", DropDownListcountry.SelectedValue.ToString());
+
+            com.ExecuteNonQuery();
+            Response.Redirect("table.aspx");
+            conn.Close();
+        }
+        catch(Exception ex)
+        {
+            Response.Write("Error:" + ex.ToString());
+        }
 
     }
     protected void TextBoxuserName_TextChanged(object sender, EventArgs e)
