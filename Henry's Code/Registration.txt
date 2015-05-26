@@ -1,0 +1,40 @@
+string hashBox = GetMD5(TextBox3.Text);
+        try
+        {
+            Guid newGUID = Guid.NewGuid();
+           
+            SqlConnection conn = new SqlConnection(ConfigurationManager.ConnectionStrings["RegistrationConnectionString"].ConnectionString);
+            conn.Open();
+            string insertQuery = "insert into UserData (Id, UserName, Email, Password) values (@Id, @Uname, @email, @password)";
+            SqlCommand com = new SqlCommand(insertQuery, conn);
+            com.Parameters.AddWithValue("@Id", newGUID.ToString());
+            com.Parameters.AddWithValue("@Uname", TextBoxUN.Text);
+            com.Parameters.AddWithValue("@email", TextBox2.Text);
+            com.Parameters.AddWithValue("@password", hashBox);
+            com.ExecuteNonQuery();
+            Response.Redirect("Manager.aspx");
+            Response.Write("Registration  is Successful");
+            conn.Close();
+            
+        }
+        catch(Exception ex)
+        {
+            Response.Write("Error:" + ex.ToString());
+        }
+
+
+
+
+        public string GetMD5(string text)
+    {
+        MD5CryptoServiceProvider md5 = new MD5CryptoServiceProvider();
+        md5.ComputeHash(ASCIIEncoding.ASCII.GetBytes(text));
+        byte[] result = md5.Hash;
+        StringBuilder str = new StringBuilder();
+        for (int i = 1; i < result.Length; i++)
+        {
+            str.Append(result[i].ToString("x2"));
+        }
+        return str.ToString();
+        
+    }

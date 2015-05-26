@@ -1,0 +1,62 @@
+{
+    protected void Page_Load(object sender, EventArgs e)
+    {
+        String text = (Guid.NewGuid().ToString()).Substring(0, 5);
+        Response.Cookies["Captcha"]["value"] = text;
+        imagecaptcha.ImageUrl = "Captcha.aspx";
+    }
+    protected void Button1_Click(object sender, EventArgs e)
+    {
+        if (IsPostBack)
+        {
+            SqlConnection conn = new SqlConnection(ConfigurationManager.ConnectionStrings["RegistrationConnectionString"].ConnectionString);
+            conn.Open();
+            string checkuser = "select count(*) from UserData where UserName='" + TextBoxUserN.Text + "'";
+            SqlCommand com = new SqlCommand(checkuser, conn);
+            int temp = Convert.ToInt32(com.ExecuteScalar().ToString());
+            conn.Close();
+            if (temp == 1)
+            {
+                conn.Open();
+                string checkPasswordQuery = "Select password from UserData where UserName='" + TextBoxUserN.Text + "'";
+                SqlCommand passComm = new SqlCommand(checkPasswordQuery, conn);
+                string password = passComm.ExecuteScalar().ToString().Replace(" ", "");
+                if (password == GetMD5(TextBoxPW.Text))
+                {
+                    Session["New"] = TextBoxUserN.Text;
+                    Response.Write("Password is correct");
+                    
+                }
+                else
+                {
+                    Response.Write("Incorret Password");
+                }
+            }
+            conn.Close();
+        }
+        if (txtcaptcha.Text.ToString() == Request.Cookies["Captcha"]["value"])
+        {
+            Response.Redirect("User.aspx");
+        }
+    }
+
+    protected void LBcaptcha_Click(object sender, EventArgs e)
+    {
+        Response.Cookies["Captcha"]["value"] = (Guid.NewGuid().ToString()).Substring(0, 5);
+        imagecaptcha.ImageUrl = "Captcha.aspx";
+    }
+
+    public string GetMD5(string text)
+    {
+        MD5CryptoServiceProvider md5 = new MD5CryptoServiceProvider();
+        md5.ComputeHash(ASCIIEncoding.ASCII.GetBytes(text));
+        byte[] result = md5.Hash;
+        StringBuilder str = new StringBuilder();
+        for (int i = 1; i < result.Length; i++)
+        {
+            str.Append(result[i].ToString("x2"));
+        }
+        return str.ToString();
+
+    }
+}
