@@ -10,6 +10,8 @@
     <form id="form1" runat="server">
     <div>
     
+        <asp:Label ID="Labelwelcome" runat="server" Text="Welcome ....." Font-Size="Medium" style="text-align: center; font-weight: 700; font-size: xx-large"></asp:Label>
+
         <asp:SqlDataSource ID="SqlDataSource1" runat="server" ConnectionString="<%$ ConnectionStrings:RegistrationConnectionString %>" SelectCommand="SELECT * FROM [Userdata]" ConflictDetection="CompareAllValues" DeleteCommand="DELETE FROM [Userdata] WHERE [Id] = @original_Id AND [Username] = @original_Username AND [Email] = @original_Email AND [Password] = @original_Password AND [Country] = @original_Country" InsertCommand="INSERT INTO [Userdata] ([Id], [Username], [Email], [Password], [Country]) VALUES (@Id, @Username, @Email, @Password, @Country)" OldValuesParameterFormatString="original_{0}" UpdateCommand="UPDATE [Userdata] SET [Username] = @Username, [Email] = @Email, [Password] = @Password, [Country] = @Country WHERE [Id] = @original_Id AND [Username] = @original_Username AND [Email] = @original_Email AND [Password] = @original_Password AND [Country] = @original_Country">
             <DeleteParameters>
                 <asp:Parameter Name="original_Id" Type="String" />
@@ -59,8 +61,9 @@
     
     </div>
 &nbsp;
-    </form>
     <p>
-        &nbsp;</p>
-</body>
+        <asp:Button ID="Buttonlogout" runat="server" Text="Logout" OnClick="Buttonlogout_Click" />
+        </p>
+    </form>
+    </body>
 </html>

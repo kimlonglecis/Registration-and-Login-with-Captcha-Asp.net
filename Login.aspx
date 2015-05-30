@@ -61,11 +61,13 @@
                 <td class="auto-style3">&nbsp;</td>
                 <td>
                     <asp:Button ID="Button1" runat="server" OnClick="Button1_Click" Style="height: 26px" Text="Submit" />
-                    <input id="Reset1" type="reset" value="reset" /></td>
+                    <input id="Reset1" type="reset" value="reset" /> </td>
             </tr>
             <tr>
                 <td class="auto-style3">&nbsp;</td>
-                <td>&nbsp;</td>
+                <td>
+                    <asp:HyperLink ID="HyperLink1" runat="server" NavigateUrl="~/Registration.aspx">Register new Account</asp:HyperLink>
+                </td>
             </tr>
             <tr>
                 <td class="auto-style3">&nbsp;</td>
